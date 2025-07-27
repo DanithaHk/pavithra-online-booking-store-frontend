@@ -9,8 +9,7 @@ import {
     HiX,
 } from "react-icons/hi";
 
-import "./Navbar.css"; // Import the CSS file
-
+import "./Navbar.css";
 const Navbar: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -42,6 +41,10 @@ const Navbar: React.FC = () => {
                     <Link to="/contact" className="menu-item">
                         Contact
                     </Link>
+                    <Link to="/admin" className="menu-item">
+                        Admin
+                    </Link>
+
 
                     <input
                         type="text"

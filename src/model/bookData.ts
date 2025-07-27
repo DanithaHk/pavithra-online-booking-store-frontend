@@ -1,9 +1,9 @@
-export interface bookData {
+export interface Book {
     title: string;
-    author: string;
     description: string;
-    price: number;
-    quantity: number;
     category: string;
-    imageUrl: string;
+    trending: boolean;
+    oldPrice: number;
+    newPrice: number;
+    coverImage: string;
 }

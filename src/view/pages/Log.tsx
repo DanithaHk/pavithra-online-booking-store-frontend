@@ -32,8 +32,14 @@ export function Login() {
             localStorage.setItem('user', user.name);
             localStorage.setItem('role', user.role);
 
-            alert("Successfully logged in!");
-            navigate('/');
+
+            if (user.role === 'customer' ) {
+                alert("Login successful.");
+                navigate("/");
+            } else if (user.role === 'admin') {
+                alert("Login successful.");
+                navigate("/admin");
+            }
         } catch (error) {
             console.error(error);
             setMessage("Login failed. Please check your credentials.");
