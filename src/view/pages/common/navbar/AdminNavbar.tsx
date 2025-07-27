@@ -18,7 +18,7 @@ const AdminNavbar = () => {
                         </li>
                         <li>
                             <Link
-                                to="/admin/AddBook"
+                                to="/admin/book"
                                 className="flex items-center gap-2 p-2 hover:bg-gray-700 rounded transition"
                             >
                                 <FaBook /> Books

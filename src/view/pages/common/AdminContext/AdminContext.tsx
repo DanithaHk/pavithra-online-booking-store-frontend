@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 
 import AdminDashboard from "../../dashbord/AdminDashbord.tsx";
 import AdminUsersPage from "../../admin/users/AdminUsersPage.tsx";
+import AdminBooksPage from "../../admin/book/AdminBooksPage.tsx";
 
 export function AdminContext() {
     return (
@@ -10,6 +11,7 @@ export function AdminContext() {
                 {/* Relative paths without leading slash */}
                 <Route path="" element={<AdminDashboard />} />
                 <Route path="users" element={<AdminUsersPage />} />
+                <Route path="book" element={<AdminBooksPage />} />
             </Routes>
         </div>
     );
