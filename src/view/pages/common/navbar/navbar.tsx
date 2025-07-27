@@ -56,12 +56,12 @@ const Navbar: React.FC = () => {
                     <Link to="/cart" className="icon-link" aria-label="Cart">
                         <HiOutlineShoppingCart size={24} />
                     </Link>
-                    <Link to="/profile" className="icon-link" aria-label="Profile">
+                    <Link to="/login" className="icon-link" aria-label="Profile">
                         <HiOutlineUser size={24} />
                     </Link>
                 </div>
 
-                {/* Mobile menu toggle */}
+
                 <button
                     className="mobile-toggle"
                     onClick={() => setIsOpen(!isOpen)}
@@ -105,7 +105,7 @@ const Navbar: React.FC = () => {
                         <Link to="/cart" className="icon-link" aria-label="Cart" onClick={() => setIsOpen(false)}>
                             <HiOutlineShoppingCart size={24} />
                         </Link>
-                        <Link to="/profile" className="icon-link" aria-label="Profile" onClick={() => setIsOpen(false)}>
+                        <Link to="/login" className="icon-link" aria-label="Profile" onClick={() => setIsOpen(false)}>
                             <HiOutlineUser size={24} />
                         </Link>
                     </div>

@@ -1,16 +1,24 @@
 import { Route, Routes } from "react-router-dom";
-import Navbar from "./view/pages/common/navbar/navbar";
-import { Home } from "./view/pages/Home";
-import Footer from "./view/pages/common/footer/footer.tsx";
+
+import {Login} from "./view/pages/Log.tsx";
+import {DefaultLayout} from "./view/pages/common/DefaultLayout/DefaultLayout.tsx";
+import Register from "./view/pages/Register.tsx";
+
 
 function App() {
+
     return (
         <>
-            <Navbar />
+
             <Routes>
-                <Route path="/" element={<Home />} />
+                <Route path="/" element={<DefaultLayout />} />
+                <Route path="/login" element={<Login />} />
+                <Route
+                    path="/register"
+                    element={<Register/>}
+                />
             </Routes>
-            <Footer />
+
         </>
     );
 }
