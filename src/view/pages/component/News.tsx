@@ -52,6 +52,7 @@ const news = [
 
 const News = () => {
     return (
+
         <div className="news-section">
             <h2 className="news-title">News</h2>
 

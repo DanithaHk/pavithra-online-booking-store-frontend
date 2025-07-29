@@ -3,23 +3,24 @@ import { HiPencil, HiTrash } from "react-icons/hi";
 import CreateBookModal from "./CreateBookModal";
 import UpdateBookModal from "./UpdateBookModal";
 import { backendApi } from "../../../../../api.ts";
+import type {BookData} from "../../../../model/bookData.ts";
 
-interface BookData {
-    _id: string;
-    title: string;
-    author: string;
-    description?: string;
-    photo?: string;
-}
 
 const AdminBooksPage: React.FC = () => {
     const [books, setBooks] = useState<BookData[]>([]);
     const [editingBook, setEditingBook] = useState<BookData | null>(null);
     const [showCreateModal, setShowCreateModal] = useState(false);
 
+/*
+    const [imageUrl , setImageurl] = useState<string | null>(null);
+*/
+
     const fetchBooks = async () => {
         try {
-            const res = await backendApi.get("/book");
+            const res = await backendApi.get("admin/book");
+/*
+            setImageurl(`http://localhost:3000/uploads/books/${res.data[0].photo}`);
+*/
             setBooks(res.data);
         } catch (err) {
             console.error("Failed to fetch books", err);
@@ -28,12 +29,14 @@ const AdminBooksPage: React.FC = () => {
 
     const handleDelete = async (id: string) => {
         try {
-            await backendApi.delete(`/book/${id}`);
+            await backendApi.delete(`admin/book/${id}`);
             fetchBooks();
         } catch (err) {
             console.error("Failed to delete book", err);
         }
     };
+
+
 
     useEffect(() => {
         fetchBooks();
@@ -62,41 +65,45 @@ const AdminBooksPage: React.FC = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {books.map((book) => (
-                    <tr key={book._id} className="border-t hover:bg-gray-50">
-                        <td className="p-3">{book.title}</td>
-                        <td className="p-3">{book.author}</td>
-                        <td className="p-3 max-w-xs truncate">{book.description}</td>
-                        <td className="p-3">
-                            {book.photo ? (
-                                <img
-                                    src={`http://localhost:3000/uploads/${book.photo}`}
-                                    alt={book.title}
-                                    className="h-12 w-12 object-cover rounded"
-                                />
-                            ) : (
-                                "No photo"
-                            )}
-                        </td>
-                        <td className="p-3 space-x-2">
-                            <button
-                                onClick={() => setEditingBook(book)}
-                                className="text-blue-500"
-                                title="Edit Book"
-                            >
-                                <HiPencil />
-                            </button>
-                            <button
-                                onClick={() => handleDelete(book._id)}
-                                className="text-red-500"
-                                title="Delete Book"
-                            >
-                                <HiTrash />
-                            </button>
-                        </td>
-                    </tr>
-                ))}
+                {books.map((book) => {
+                    console.log(`http://localhost:3000/uploads/books/${book.photo}`);
+                    return (
+                        <tr key={book._id} className="border-t hover:bg-gray-50">
+                            <td className="p-3">{book.title}</td>
+                            <td className="p-3">{book.author}</td>
+                            <td className="p-3 max-w-xs truncate">{book.description}</td>
+                            <td className="p-3">
+                                {book.photo ? (
+                                    <img
+                                        src={`http://localhost:3000/uploads/books/${book.photo}`}
+                                        alt={book.title}
+                                        className="h-12 w-12 object-cover rounded"
+                                    />
+                                ) : (
+                                    "No photo"
+                                )}
+                            </td>
+                            <td className="p-3 space-x-2">
+                                <button
+                                    onClick={() => setEditingBook(book)}
+                                    className="text-blue-500"
+                                    title="Edit Book"
+                                >
+                                    <HiPencil/>
+                                </button>
+                                <button
+                                    onClick={() => handleDelete(book._id)}
+                                    className="text-red-500"
+                                    title="Delete Book"
+                                >
+                                    <HiTrash/>
+                                </button>
+                            </td>
+                        </tr>
+                    );
+                })}
                 </tbody>
+
             </table>
 
             {showCreateModal && (

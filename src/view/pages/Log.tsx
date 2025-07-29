@@ -18,7 +18,7 @@ export function Login() {
 
     const authenticateUser = async (data: FormData) => {
         try {
-            const response = await backendApi.post('/api/auth/login', data);
+            const response = await backendApi.post('/auth/login', data);
             console.log("Backend response:", response.data);
 
             const accessToken = response.data.accessToken;

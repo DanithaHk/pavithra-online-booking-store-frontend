@@ -1,13 +1,6 @@
 import React, { useState } from "react";
 import { backendApi } from "../../../../../api.ts";
-
-interface BookData {
-    _id: string;
-    title: string;
-    author: string;
-    description?: string;
-    photo?: string;
-}
+import type { BookData } from "../../../../model/bookData.ts";
 
 interface Props {
     book: BookData;
@@ -19,38 +12,64 @@ const UpdateBookModal: React.FC<Props> = ({ book, onClose }) => {
         title: book.title,
         author: book.author,
         description: book.description || "",
+        category: book.category || "",
+        price: book.price?.toString() || "",
+        photo: book.photo || "",
     });
-    const [photo, setPhoto] = useState<File | null>(null);
+
+    const [photoFile, setPhotoFile] = useState<File | null>(null);
 
     const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
     ) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
-            setPhoto(e.target.files[0]);
+            setPhotoFile(e.target.files[0]);
         }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        const formData = new FormData();
-        formData.append("title", form.title);
-        formData.append("author", form.author);
-        formData.append("description", form.description);
-        if (photo) formData.append("photo", photo);
-
         try {
-            await backendApi.put(`/book/${book._id}`, formData, {
-                headers: { "Content-Type": "multipart/form-data" },
-            });
-            onClose();
-        } catch (err) {
-            alert("Failed to update book");
-            console.error(err);
+            if (photoFile) {
+                const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+                if (!allowedTypes.includes(photoFile.type)) {
+                    alert("Invalid image format. Please upload a JPEG, PNG, or JPG file.");
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append("photo", photoFile);
+
+                const uploadRes = await backendApi.post("/files/book", formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data"
+                    }
+                });
+
+                form.photo = uploadRes.data.filename;
+            }
+
+            const response = await backendApi.put(`/admin/book/update/${book.title}`, form);
+
+            if (response.status === 200) {
+                alert("Book updated successfully.");
+                onClose();
+            } else {
+                alert("Book update failed.");
+            }
+        } catch (err: any) {
+            if (err.response) {
+                console.error("Error:", err.response.data);
+                alert("Error: " + JSON.stringify(err.response.data));
+            } else {
+                console.error("Unknown error:", err);
+                alert("An unexpected error occurred.");
+            }
         }
     };
 
@@ -77,6 +96,31 @@ const UpdateBookModal: React.FC<Props> = ({ book, onClose }) => {
                         required
                         className="w-full border border-gray-300 rounded-lg px-4 py-3 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
                     />
+                    <select
+                        name="category"
+                        value={form.category}
+                        onChange={handleChange}
+                        required
+                        className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                    >
+                        <option value="" disabled>Select Category</option>
+                        <option value="fiction">Fiction</option>
+                        <option value="non-fiction">Non-fiction</option>
+                        <option value="biography">Biography</option>
+                        <option value="science">Science</option>
+                        <option value="history">History</option>
+                    </select>
+                    <input
+                        name="price"
+                        value={form.price}
+                        onChange={handleChange}
+                        placeholder="Price"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        required
+                        className="w-full border border-gray-300 rounded-lg px-4 py-3 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                    />
                     <textarea
                         name="description"
                         value={form.description}
@@ -89,7 +133,7 @@ const UpdateBookModal: React.FC<Props> = ({ book, onClose }) => {
                         htmlFor="photo-upload"
                         className="block cursor-pointer rounded-lg border-2 border-dashed border-gray-300 px-4 py-6 text-center text-gray-500 hover:border-blue-400 hover:text-blue-600 transition"
                     >
-                        {photo ? photo.name : "Click to upload book cover photo"}
+                        {photoFile ? photoFile.name : "Click to upload book cover photo"}
                         <input
                             id="photo-upload"
                             type="file"
@@ -98,10 +142,10 @@ const UpdateBookModal: React.FC<Props> = ({ book, onClose }) => {
                             className="hidden"
                         />
                     </label>
-                    {!photo && book.photo && (
+                    {!photoFile && form.photo && (
                         <img
-                            src={`http://localhost:3000/uploads/${book.photo}`}
-                            alt={book.title}
+                            src={`http://localhost:3000/uploads/${form.photo}`}
+                            alt={form.title}
                             className="h-24 mt-2 rounded mx-auto"
                         />
                     )}

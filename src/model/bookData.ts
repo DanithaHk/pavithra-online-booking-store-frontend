@@ -1,9 +1,9 @@
-export interface Book {
+export interface BookData {
+    _id: string;
     title: string;
-    description: string;
-    category: string;
-    trending: boolean;
-    oldPrice: number;
-    newPrice: number;
-    coverImage: string;
+    author: string;
+    description?: string;
+    photo?: string;     // filename or URL of the book cover photo
+    category?: string;  // e.g. "Fiction", "Science", etc.
+    price?: number;     // price in your currency
 }

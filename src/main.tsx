@@ -1,3 +1,4 @@
+/*
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
@@ -10,5 +11,25 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <BrowserRouter>
             <App />
         </BrowserRouter>
+    </React.StrictMode>
+);
+*/
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App.tsx';
+import { Provider } from 'react-redux';
+import { store } from './store/store.ts';
+import { BrowserRouter } from 'react-router-dom';
+import './index.css';  // make sure path correct
+
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+    <React.StrictMode>
+        <Provider store={store}>
+            <BrowserRouter> {/* ✅ wrap Router context */}
+                <App />
+            </BrowserRouter>
+        </Provider>
     </React.StrictMode>
 );
