@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../../../store/store.ts";
-import { decreaseQuantity, increaseQuantity } from "../../../../slices/cartSlice.ts";
+import {decreaseQuantity, increaseQuantity, removeBookFromCart} from "../../../../slices/cartSlice.ts";
 
 interface ModifyCartProps {
     data: any;
@@ -50,6 +50,13 @@ export function ModifyCart({ data }: ModifyCartProps) {
             >
                 +
             </button>
+            <button
+                onClick={() => dispatch(removeBookFromCart(data.books._id))}
+                className="text-red-500 text-xs hover:underline"
+            >
+                Remove
+            </button>
+
         </div>
     );
 }

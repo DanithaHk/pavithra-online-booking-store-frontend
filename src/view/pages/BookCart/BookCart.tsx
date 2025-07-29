@@ -1,9 +1,10 @@
+/*
 
 
 import {useSelector} from "react-redux";
 import type {RootState} from "../../../store/store.ts";
 
-/*
+/!*
 type CartItemType = {
     product: {
         id: number;
@@ -14,14 +15,14 @@ type CartItemType = {
     };
     itemCount: number;
 };
-*/
+*!/
 
-/*interface ShoppingCartProps {
+/!*interface ShoppingCartProps {
     itemsList: CartItemType[];
-}*/
+}*!/
 
 const images: Record<string, string> = import.meta.glob(
-    "../../../assets/products/*",
+    "../../../assets/products/!*",
     { eager: true, import: "default" }
 );
 
@@ -89,6 +90,91 @@ export function ShoppingCart() {
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+    );
+}*/
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import type { RootState } from "../../../store/store";
+
+const images: Record<string, string> = import.meta.glob("../../../assets/books/*", {
+    eager: true,
+    import: "default",
+});
+
+export function BookCart() {
+    const { books } = useSelector((state: RootState) => state.cart);
+    const navigate = useNavigate();
+
+    const totalAmount = books
+        .reduce((sum, item) => sum + (item.books.price || 0) * item.booksCount, 0)
+        .toFixed(2);
+
+    return (
+        <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-200 p-6 flex items-center justify-center">
+            <div className="w-full max-w-6xl bg-white rounded-3xl shadow-xl overflow-hidden">
+                <div className="text-center bg-indigo-700 text-white py-6 text-3xl font-bold">🛒 Your Book Cart</div>
+
+                <div className="overflow-x-auto">
+                    <table className="min-w-full text-sm sm:text-base text-left">
+                        <thead className="bg-indigo-600 text-white">
+                        <tr>
+                            <th className="px-5 py-4">Image</th>
+                            <th className="px-5 py-4">Title</th>
+                            <th className="px-5 py-4">Author</th>
+                            <th className="px-5 py-4">Qty</th>
+                            <th className="px-5 py-4">Price</th>
+                            <th className="px-5 py-4">Total</th>
+                        </tr>
+                        </thead>
+                        <tbody className="text-gray-800">
+                        {books.length === 0 ? (
+                            <tr>
+                                <td colSpan={6} className="text-center py-6 bg-indigo-100 text-indigo-700 font-medium">
+                                    💤 Your cart is empty.
+                                </td>
+                            </tr>
+                        ) : (
+                            books.map((item, index) => (
+                                <tr
+                                    key={item.books._id}
+                                    className={`${index % 2 === 0 ? "bg-indigo-50" : "bg-indigo-100"} border-b border-indigo-200`}
+                                >
+                                    <td className="px-5 py-4">
+                                        <img
+                                            src={images[`../../../assets/books/${item.books.photo}`]}
+                                            alt={item.books.title}
+                                            className="w-16 h-20 object-cover rounded-lg shadow"
+                                        />
+                                    </td>
+                                    <td className="px-5 py-4 font-bold">{item.books.title}</td>
+                                    <td className="px-5 py-4">{item.books.author}</td>
+                                    <td className="px-5 py-4 text-center">{item.booksCount}</td>
+                                    <td className="px-5 py-4">{item.books.price} LKR</td>
+                                    <td className="px-5 py-4 font-semibold text-indigo-800">
+                                        {(item.books.price! * item.booksCount).toFixed(2)} LKR
+                                    </td>
+                                </tr>
+                            ))
+                        )}
+                        </tbody>
+                    </table>
+                </div>
+
+                {books.length > 0 && (
+                    <div className="flex justify-between items-center px-6 py-4 bg-indigo-50 border-t border-indigo-200">
+                        <span className="text-lg font-bold text-indigo-900">
+                            Total: {totalAmount} LKR
+                        </span>
+                        <button
+                            onClick={() => navigate("/checkout")}
+                            className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-lg shadow transition"
+                        >
+                            Proceed to Checkout
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );
