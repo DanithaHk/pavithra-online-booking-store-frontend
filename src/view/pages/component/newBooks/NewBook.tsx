@@ -213,13 +213,14 @@ type BookProps = {
     data: BookData;
 };
 
-const images: Record<string, string> = import.meta.glob('../../../assets/books/*', { eager: true, import: 'default' });
+
 
 export function NewBook({ data }: BookProps) {
     const dispatch = useDispatch<AppDispatch>();
     const book = useSelector((state: RootState) =>
         state.cart.books.find(cartBook => cartBook._id === data._id) // fix this based on your store shape
     );
+
 
     const [showToast, setShowToast] = useState(false);
 
@@ -229,8 +230,8 @@ export function NewBook({ data }: BookProps) {
         setTimeout(() => setShowToast(false), 2000);
     };
 
-    // Optionally get image if you want to use from local assets
-    // let image = images[`../../../assets/books/${data.photo}`];
+    console.log(`http://localhost:3000/api/uploads/users/${data.photo}`)
+
 
     return (
         <div className="w-80 bg-white/60 backdrop-blur-md border border-gray-200 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer">
@@ -245,9 +246,10 @@ export function NewBook({ data }: BookProps) {
                         loading="lazy"
                         className="absolute top-0 left-0 w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                     />
+
                 </div>
             </div>
-            {console.log(data.photo)}
+
             {/* Book Info */}
             <div className="px-6 pb-6 space-y-2 text-center">
                 <h3 className="text-lg font-bold text-gray-800">{data.title}</h3>
