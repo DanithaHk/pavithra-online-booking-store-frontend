@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../../../store/store";
 import { clearCart } from "../../../slices/cartSlice";
+import axios from "axios";
 
 export function Checkout() {
     const { books } = useSelector((state: RootState) => state.cart);
@@ -16,21 +17,45 @@ export function Checkout() {
 
     const total = books.reduce((sum, item) => sum + (item.books.price || 0) * item.booksCount, 0);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // 👉 Send order to backend here via Axios or fetch
+        const orderPayload = {
+            fullName: address.fullName,
+            email: address.email,
+            phone: address.phone,
+            shippingAddress: address.shippingAddress,
+            items: books.map((item) => ({
+                bookId: item.books._id,
+                title: item.books.title,
+                price: item.books.price,
+                quantity: item.booksCount,
+            })),
+            total,
+        };
+        const token = localStorage.getItem("token")
+        try {
+            const response = await axios.post("http://localhost:3000/api/order/checkout", orderPayload,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+            console.log("Order successful:", response.data);
 
-        alert(`Thank you for your order! Total: ${total} LKR`);
+            alert(`Thank you for your order! Total: ${total.toFixed(2)} LKR`);
 
-        // Optional: clear cart after submit
-        dispatch(clearCart());
+            dispatch(clearCart());
+        } catch (err) {
+            console.error("Failed to place order", err);
+            alert("❌ Order failed. Please try again.");
+        }
     };
 
     return (
         <div className="min-h-screen bg-gray-100 flex justify-center items-center px-4 py-8">
             <div className="max-w-2xl w-full bg-white rounded-2xl shadow-lg p-8">
-                <h2 className="text-2xl font-bold text-center mb-6 text-indigo-700"> Cash On Delivery (COD) </h2>
+                <h2 className="text-2xl font-bold text-center mb-6 text-indigo-700">Cash On Delivery (COD)</h2>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <input
@@ -65,7 +90,9 @@ export function Checkout() {
                         className="w-full border border-gray-300 rounded px-4 py-2 h-24"
                     />
                     <div className="flex justify-between mt-6 items-center">
-                        <span className="text-lg font-semibold text-indigo-800">Total: {total.toFixed(2)} LKR</span>
+                        <span className="text-lg font-semibold text-indigo-800">
+                            Total: {total.toFixed(2)} LKR
+                        </span>
                         <button
                             type="submit"
                             className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded shadow"

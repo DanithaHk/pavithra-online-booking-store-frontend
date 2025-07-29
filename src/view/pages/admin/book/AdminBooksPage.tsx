@@ -29,7 +29,8 @@ const AdminBooksPage: React.FC = () => {
 
     const handleDelete = async (id: string) => {
         try {
-            await backendApi.delete(`admin/book/${id}`);
+            console.log(id)
+            await backendApi.delete(`admin/book/delete${id}`);
             fetchBooks();
         } catch (err) {
             console.error("Failed to delete book", err);

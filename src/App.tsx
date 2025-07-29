@@ -9,16 +9,13 @@ import { DefaultLayout } from "./view/pages/common/DefaultLayout/DefaultLayout.t
 function App() {
     return (
         <Routes>
-
             <Route path="*" element={<DefaultLayout />} />
-
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
 
-
             <Route path="/admin/*" element={<AdminLayout />}>
 
-                <Route path="dashboard/*" element={<AdminContext />} />
+                <Route path="" element={<AdminContext />} />
             </Route>
         </Routes>
     );

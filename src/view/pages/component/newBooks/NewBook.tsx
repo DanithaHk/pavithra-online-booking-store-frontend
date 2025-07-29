@@ -218,7 +218,7 @@ type BookProps = {
 export function NewBook({ data }: BookProps) {
     const dispatch = useDispatch<AppDispatch>();
     const book = useSelector((state: RootState) =>
-        state.cart.books.find(cartBook => cartBook._id === data._id) // fix this based on your store shape
+        state.cart.books.find(cartBook => cartBook.books._id === data._id)
     );
 
 
