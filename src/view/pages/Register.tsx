@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-import { backendApi } from "../../../api"; // ✅ Adjust import path if needed
+import {Link, useNavigate} from "react-router-dom";
+import { backendApi } from "../../../api";
 
 type RegisterFormData = {
     name: string;
@@ -11,6 +11,7 @@ type RegisterFormData = {
 };
 
 const Register: React.FC = () => {
+    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
@@ -19,13 +20,15 @@ const Register: React.FC = () => {
 
     const onSubmit = async (data: RegisterFormData) => {
         try {
-            const response = await backendApi.post("/api/auth/register", {
+            const response = await backendApi.post("auth/register", {
                 ...data,
                 role: "customer", // Force role as customer
             });
 
+
             if (response.status === 201) {
                 alert("Registration successful!");
+                navigate("/");
             } else {
                 alert("Registration failed!");
             }
@@ -42,7 +45,7 @@ const Register: React.FC = () => {
                 <h2 className="text-xl font-semibold mb-4">Please Register</h2>
 
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    {/* Name */}
+
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
                             Name
@@ -57,7 +60,6 @@ const Register: React.FC = () => {
                         {errors.name && <p className="text-red-500 text-xs">{errors.name.message}</p>}
                     </div>
 
-                    {/* Email */}
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
                             Email
@@ -72,7 +74,6 @@ const Register: React.FC = () => {
                         {errors.email && <p className="text-red-500 text-xs">{errors.email.message}</p>}
                     </div>
 
-                    {/* Password */}
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
                             Password
@@ -89,21 +90,19 @@ const Register: React.FC = () => {
                         )}
                     </div>
 
-                    {/* Submit */}
                     <div className="mb-4">
                         <button
                             type="submit"
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-8 rounded"
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-8 rounded cursor-pointer"
                         >
                             Register
                         </button>
                     </div>
                 </form>
 
-                {/* Redirect to Login */}
                 <p className="text-sm">
                     Already have an account?{" "}
-                    <Link to="/login" className="text-blue-500 hover:text-blue-700">
+                    <Link to="/login" className="text-blue-500 hover:text-blue-700 cursor-pointer">
                         Login
                     </Link>
                 </p>

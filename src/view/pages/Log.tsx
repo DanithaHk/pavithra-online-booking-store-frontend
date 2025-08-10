@@ -52,30 +52,35 @@ export function Login() {
             <div className='w-full max-w-sm mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4'>
                 <h2 className='text-xl font-semibold mb-4'>Please Login</h2>
 
-                <form onSubmit={handleSubmit(authenticateUser)}>
+                <form onSubmit={handleSubmit(authenticateUser)} autoComplete="off">
+
                     <div className='mb-4'>
                         <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor="email">Email</label>
                         <input
-                            {...register("email", { required: true })}
+                            {...register("email", {required: true})}
                             type="email"
                             id="email"
+                            autoComplete="off"
                             placeholder='Email Address'
                             className='shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow'
                         />
                     </div>
                     <div className='mb-4'>
-                        <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor="password">Password</label>
+                        <label className='block text-gray-700 text-sm font-bold mb-2'
+                               htmlFor="password">Password</label>
                         <input
-                            {...register("password", { required: true })}
+                            {...register("password", {required: true})}
                             type="password"
                             id="password"
+                            autoComplete="off"
                             placeholder='Password'
                             className='shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow'
                         />
                     </div>
                     {message && <p className='text-red-500 text-xs italic mb-3'>{message}</p>}
                     <div>
-                        <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-8 rounded focus:outline-none'>
+                        <button
+                            className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-8 rounded focus:outline-none'>
                             Login
                         </button>
                     </div>
@@ -85,7 +90,7 @@ export function Login() {
                     Haven't an account? Please <Link to="/Register" className='text-blue-500 hover:text-blue-700'>Register</Link>
                 </p>
 
-                <p className='mt-5 text-center text-gray-500 text-xs'>©2025 Book Store. All rights reserved.</p>
+                <p className='mt-5 text-center text-gray-500 text-xs'>©2025 Pavithra Book Store. All rights reserved.</p>
             </div>
         </div>
     );

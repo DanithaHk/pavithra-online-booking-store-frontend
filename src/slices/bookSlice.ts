@@ -14,7 +14,8 @@ const initialState : BookState= {
 export const getAllBooks = createAsyncThunk(
     'book/getAllBooks',
     async () => {
-        const response = await backendApi.get("/admin/book");
+        const response = await backendApi.get("/book/all/");
+        console.log(response.data)
         return await response.data;
     }
 )

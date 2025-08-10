@@ -5,7 +5,7 @@ import 'swiper/css/navigation';
 import { Pagination, Navigation } from 'swiper/modules';
 import { Link } from 'react-router-dom';
 
-import './News.css'; // 👈 Import custom CSS
+import './News.css';
 
 import news1 from "../../../assets/news/news-1.png";
 import news2 from "../../../assets/news/news-2.png";

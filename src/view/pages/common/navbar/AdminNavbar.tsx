@@ -1,7 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaBook, FaClipboardList, FaUsers } from "react-icons/fa";
 
 const AdminNavbar = () => {
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        navigate("/login");
+    };
+
     return (
         <div className="admin-navbar">
             <aside className="bg-gray-800 text-white w-44 min-h-screen p-6 shadow-md fixed">
@@ -31,6 +38,14 @@ const AdminNavbar = () => {
                             >
                                 <FaClipboardList /> Orders
                             </Link>
+                        </li>
+                        <li>
+                            <button
+                                onClick={handleLogout}
+                                className="w-full py-2 mt-6 bg-red-600 hover:bg-red-700 text-white rounded"
+                            >
+                                Logout
+                            </button>
                         </li>
                     </ul>
                 </nav>

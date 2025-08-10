@@ -230,7 +230,7 @@ export function NewBook({ data }: BookProps) {
         setTimeout(() => setShowToast(false), 2000);
     };
 
-    console.log(`http://localhost:3000/api/uploads/users/${data.photo}`)
+
 
 
     return (
@@ -246,7 +246,7 @@ export function NewBook({ data }: BookProps) {
                         loading="lazy"
                         className="absolute top-0 left-0 w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                     />
-
+                    {console.log(data.photo)}
                 </div>
             </div>
 
