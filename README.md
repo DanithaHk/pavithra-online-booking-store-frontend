@@ -25,7 +25,7 @@ It allows customers to browse and purchase books online, while admins can manage
 ### 👨‍💻 Customer
 - Browse and view books  
 - Add books to cart  
-- Checkout and place orders  
+- Checkout and place orders with payHere by Cards 
 - Receive order confirmation emails  
 
 ---
