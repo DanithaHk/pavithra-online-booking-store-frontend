@@ -27,7 +27,7 @@ import './index.css';  // make sure path correct
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <Provider store={store}>
-            <BrowserRouter> {/* ✅ wrap Router context */}
+            <BrowserRouter>
                 <App />
             </BrowserRouter>
         </Provider>

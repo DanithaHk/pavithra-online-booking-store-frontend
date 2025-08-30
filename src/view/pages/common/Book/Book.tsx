@@ -1,3 +1,4 @@
+/*
 import {ModifyCart} from "../ModifyCart/ModifyCart.tsx";
 import type {BookData} from "../../../../model/bookData.ts";
 import {useDispatch, useSelector} from "react-redux";
@@ -10,7 +11,7 @@ type BookProps={
     data:BookData
 }
 
-const images:Record<string, string>=import.meta.glob('../../../assets/events/*', {eager: true , import: 'default'});
+const images:Record<string, string>=import.meta.glob('../../../assets/events/!*', {eager: true , import: 'default'});
 
 
 
@@ -24,7 +25,7 @@ export function Book({data}:BookProps) {
     }
 
     let image=images [`../../../assets/events/${data.photo}`]
-    /*return (
+    /!*return (
         <div className="w-auto h-auto bg-blue-300 mr-2 mb-2 p-4 flex justify-center items-center shadow-xl rounded-xl shadow-transition-transform duration-200 hover:scale-105">
             <div>
                 <img className="h-[120px] w-[120px] rounded-xl"  src={image}/>
@@ -52,12 +53,12 @@ export function Book({data}:BookProps) {
             </div>
 
         </div>
-    );*/
+    );*!/
 
     return (
         <div className="w-80 bg-white rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300 cursor-pointer">
 
-            {/* Image covers full width, maintains aspect ratio, zoom on hover */}
+            {/!* Image covers full width, maintains aspect ratio, zoom on hover *!/}
             <div className="flex justify-center">
                 <div className="relative w-48 pb-[100%] overflow-hidden rounded-lg border-2 border-blue-500">
                     <img
@@ -70,7 +71,7 @@ export function Book({data}:BookProps) {
             </div>
 
 
-            {/* Content with padding and centered text */}
+            {/!* Content with padding and centered text *!/}
             <div className="p-6 space-y-3 text-center">
                 <h3 className="text-xl font-semibold text-gray-900">{data.title}</h3>
                 <p className="text-gray-600 text-sm">{data.author}</p>
@@ -96,4 +97,4 @@ export function Book({data}:BookProps) {
         </div>
     );
 
-}
+}*/

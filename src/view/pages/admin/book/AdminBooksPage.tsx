@@ -11,16 +11,9 @@ const AdminBooksPage: React.FC = () => {
     const [editingBook, setEditingBook] = useState<BookData | null>(null);
     const [showCreateModal, setShowCreateModal] = useState(false);
 
-/*
-    const [imageUrl , setImageurl] = useState<string | null>(null);
-*/
-
     const fetchBooks = async () => {
         try {
             const res = await backendApi.get("admin/book");
-/*
-            setImageurl(`http://localhost:3000/uploads/books/${res.data[0].photo}`);
-*/
             setBooks(res.data);
         } catch (err) {
             console.error("Failed to fetch books", err);
@@ -30,14 +23,12 @@ const AdminBooksPage: React.FC = () => {
     const handleDelete = async (id: string) => {
         try {
             console.log(id)
-            await backendApi.delete(`admin/book/delete${id}`);
+            await backendApi.delete(`/admin/book/delete/${id}`);
             fetchBooks();
         } catch (err) {
             console.error("Failed to delete book", err);
         }
     };
-
-
 
     useEffect(() => {
         fetchBooks();

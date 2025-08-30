@@ -19,7 +19,7 @@ export function ModifyCart({ data }: ModifyCartProps) {
 
     const decreaseBookCount = () => {
         if (!data?.books?._id) return;
-
+            dispatch(increaseQuantity(data.books._id));
         if (book && book.booksCount > 1) {
             dispatch(decreaseQuantity(data.books._id));
         } else {

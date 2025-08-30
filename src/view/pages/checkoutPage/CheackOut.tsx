@@ -2,7 +2,9 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../../../store/store";
 import { clearCart } from "../../../slices/cartSlice";
-import axios from "axios";
+
+import {backendApi} from "../../../../api.ts";
+import {useNavigate} from "react-router-dom";
 
 export function Checkout() {
     const { books } = useSelector((state: RootState) => state.cart);
@@ -14,7 +16,7 @@ export function Checkout() {
         phone: "",
         shippingAddress: "",
     });
-
+    const navigate = useNavigate();
     const total = books.reduce((sum, item) => sum + (item.books.price || 0) * item.booksCount, 0);
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -35,7 +37,7 @@ export function Checkout() {
         };
         const token = localStorage.getItem("token")
         try {
-            const response = await axios.post("http://localhost:3000/api/order/checkout", orderPayload,
+            const response =  await backendApi.post("/admin/customer/order/checkout", orderPayload,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -46,10 +48,16 @@ export function Checkout() {
             alert(`Thank you for your order! Total: ${total.toFixed(2)} LKR`);
 
             dispatch(clearCart());
-        } catch (err) {
+        } catch (err: any) {
+            if (err.response?.status === 401) {
+                alert("You are not logged in. Please log in to place an order.");
+                navigate("/login");
+                return;
+            }
             console.error("Failed to place order", err);
-            alert("❌ Order failed. Please try again.");
+            alert("Order failed. Please try again.");
         }
+
     };
 
     return (

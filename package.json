@@ -12,8 +12,10 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.2",
     "@tailwindcss/vite": "^4.1.11",
+    "@types/crypto-js": "^4.2.2",
     "axios": "^1.10.0",
     "bootstrap": "^5.3.7",
+    "crypto-js": "^4.2.0",
     "jwt-decode": "^4.0.0",
     "multer": "^2.0.2",
     "react": "^19.1.0",

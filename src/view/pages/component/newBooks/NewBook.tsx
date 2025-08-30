@@ -206,21 +206,18 @@ import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../../../store/store.ts";
 import type { BookData } from "../../../../model/bookData.ts";
 import { addBookToCart } from "../../../../slices/cartSlice.ts";
-import { useState } from "react";
+import  { useState } from "react";
 import { Toast } from "../../common/Alert/Toast.tsx";
 
 type BookProps = {
     data: BookData;
 };
 
-
-
 export function NewBook({ data }: BookProps) {
     const dispatch = useDispatch<AppDispatch>();
     const book = useSelector((state: RootState) =>
         state.cart.books.find(cartBook => cartBook.books._id === data._id)
     );
-
 
     const [showToast, setShowToast] = useState(false);
 
@@ -230,27 +227,21 @@ export function NewBook({ data }: BookProps) {
         setTimeout(() => setShowToast(false), 2000);
     };
 
-
-
-
     return (
         <div className="w-80 bg-white/60 backdrop-blur-md border border-gray-200 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer">
 
-            {/* Book Image */}
+
             <div className="flex justify-center p-4">
                 <div className="relative w-40 h-56 overflow-hidden rounded-xl border-2 border-indigo-400 shadow-sm">
-
                     <img
-                        src={data.photo ? `http://localhost:3000/api/uploads/users/${data.photo}` : '/placeholder-image.png'}
-                        alt={data.title || "Book image"}
-                        loading="lazy"
-                        className="absolute top-0 left-0 w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                        src={`http://localhost:3000/uploads/books/${data.photo}`}
+                        alt={data.title}
+                        className=""
                     />
-                    {console.log(data.photo)}
                 </div>
             </div>
 
-            {/* Book Info */}
+
             <div className="px-6 pb-6 space-y-2 text-center">
                 <h3 className="text-lg font-bold text-gray-800">{data.title}</h3>
                 <p className="text-sm text-gray-500 italic">{data.author}</p>
@@ -263,7 +254,7 @@ export function NewBook({ data }: BookProps) {
 
                 <div className="pt-4">
                     {book ? (
-                        <ModifyCart data={{ product: data }} />
+                        <ModifyCart data={{ books: data }} />
                     ) : (
                         <button
                             onClick={addToCart}
