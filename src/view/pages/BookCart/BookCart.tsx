@@ -4,13 +4,14 @@ import type { RootState } from "../../../store/store";
 import { useState } from "react";
 import CryptoJS from "crypto-js";
 import "../../../index.css";
+import {backendApi} from "../../../../api.ts";
 
 export function BookCart() {
     const { books } = useSelector((state: RootState) => state.cart);
     const navigate = useNavigate();
 
     const [showPaymentModal, setShowPaymentModal] = useState(false);
-
+    const token = localStorage.getItem("token");
 
     const totalAmount = books.reduce(
         (sum, item) => sum + (item.books.price || 0) * item.booksCount,
@@ -34,6 +35,51 @@ export function BookCart() {
         currency +
         getMd5(merchantSecret)
     );
+    function handlePaymentResponse(
+        status: string | null,
+        orderId: string | null,
+        bookId: string | null
+    ) {
+        console.log(bookId, "bookId");
+
+        if (status === "SUCCESS" && orderId) {
+            backendApi
+                .post(
+                    "/admin/customer/order/checkout",
+                    {
+                        bookId,
+                        paymentStatus: "paid",
+                        total: totalAmount,
+                        orderId,
+                    },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                )
+                .then((res) => {
+                    alert("Order Saved");
+                    console.log("Payment saved:", res.data);
+                })
+                .catch((err) => console.error("Error saving payment:", err));
+        } else if (status === "CANCEL") {
+            alert("Payment Canceled");
+        }
+
+        // Remove query params from URL
+        window.history.replaceState({}, document.title, "/");
+    }
+
+    const queryParams = new URLSearchParams(window.location.search);
+    const status = queryParams.get("status");
+    const orderId = queryParams.get("order_id");
+    const bookId = queryParams.get("bookId");
+
+    if (status || orderId) {
+        handlePaymentResponse(status, orderId, bookId);
+    }
+
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-200 p-6 flex items-start justify-center">
@@ -148,7 +194,7 @@ export function BookCart() {
                                     Payment Required
                                 </h2>
 
-                                {/* Close button */}
+
                                 <button
                                     type="button"
                                     onClick={() => setShowPaymentModal(false)}
@@ -171,16 +217,11 @@ export function BookCart() {
                                         name="merchant_id"
                                         value={merchantID}
                                     />
-                                    <input
-                                        type="hidden"
-                                        name="return_url"
-                                        value="http://localhost:5173/"
-                                    />
-                                    <input
-                                        type="hidden"
-                                        name="cancel_url"
-                                        value="http://localhost:5173/"
-                                    />
+                                    <input type="hidden" name="return_url"
+                                           value="http://localhost:5173/bookCart?status=SUCCESS&bookId=..."/>
+                                    <input type="hidden" name="cancel_url"
+                                           value="http://localhost:5173/bookCart?status=CANCEL"/>
+
                                     <input
                                         type="hidden"
                                         name="notify_url"
@@ -212,7 +253,7 @@ export function BookCart() {
                                         value={hash}
                                     />
 
-                                    {/* Inputs */}
+
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                         <input
                                             type="text"
@@ -272,7 +313,7 @@ export function BookCart() {
                                         required
                                     />
 
-                                    {/* Footer actions */}
+
                                     <div className="flex justify-end gap-2 pt-2">
                                         <button
                                             type="button"
